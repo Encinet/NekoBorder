@@ -1,0 +1,17 @@
+name: NekoBorder
+version: '1.0-SNAPSHOT'
+main: org.encinet.nekoborder.NekoBorder
+api-version: '1.20'
+authors: [ ObcbO ]
+description: Make Border Better
+website: https://github.com/encinet
+commands:
+  nekoborder:
+    aliases:
+      - border
+      - nborder
+    description: Reload
+permissions:
+  nekoborder.commands:
+    description: Use Command
+    default: op

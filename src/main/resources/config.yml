@@ -1,0 +1,10 @@
+# Debug 调试
+debug: false
+# 世界边界设置
+settings:
+  - enable: false # 是否开启
+    world: "world" # 世界名
+    isRound: false # true为园 false为方
+    center: "98.5,39.5" # 中心点 格式为"x,z"
+    xDistance: 400 # 边界x轴长度
+    zDistance: 400 # 边界z轴长度
