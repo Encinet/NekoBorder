@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.encinet.nekoborder.file.Config;
 import org.encinet.nekoborder.file.Message;
@@ -52,20 +53,20 @@ public class PlayerMoveEvent implements Listener {
         }
     }
 
-//    @EventHandler
-//    public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
-//        Location location = event.getTo();
-//        if (Config.borders.containsKey(location.getWorld())) {
-//            Border border = Config.borders.get(location.getWorld());
-//            if (BorderMath.isOutOfBorder(border, location)) {
-//                event.setCancelled(true);
-//                Player player = event.getPlayer();
-//                // 发送信息
-//                player.sendTitlePart(TitlePart.TITLE, getMessage(Message.title));
-//                player.sendTitlePart(TitlePart.SUBTITLE, getMessage(Message.subtitle));
-//            }
-//        }
-//    }
+    @EventHandler
+    public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
+        Location location = event.getTo();
+        if (Config.borders.containsKey(location.getWorld())) {
+            Border border = Config.borders.get(location.getWorld());
+            if (BorderMath.isOutOfBorder(border, location)) {
+                event.setCancelled(true);
+                Player player = event.getPlayer();
+                // 发送信息
+                player.sendTitlePart(TitlePart.TITLE, getMessage(Message.title));
+                player.sendTitlePart(TitlePart.SUBTITLE, getMessage(Message.subtitle));
+            }
+        }
+    }
 
     public static Component getMessage(List<String> list) {
         Random random = new Random();
