@@ -2,7 +2,7 @@ name: NekoBorder
 version: '${version}'
 main: org.encinet.nekoborder.NekoBorder
 api-version: '1.20'
-authors: [ ObcbO ]
+authors: [ Noctiro ]
 description: Make Border Better
 website: https://github.com/encinet
 commands:

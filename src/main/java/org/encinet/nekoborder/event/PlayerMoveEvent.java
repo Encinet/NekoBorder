@@ -24,6 +24,9 @@ import java.util.Random;
 public class PlayerMoveEvent implements Listener {
     @EventHandler
     public void onPlayerMoveEvent(org.bukkit.event.player.PlayerMoveEvent event) {
+        if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+            return; // 玩家只是转头或在同一格内小幅移动，不处理
+        }
         Location location = event.getTo();
         if (Config.borders.containsKey(location.getWorld())) {
             Border border = Config.borders.get(location.getWorld());
@@ -31,21 +34,25 @@ public class PlayerMoveEvent implements Listener {
                 // 走出边界
                 Player player = event.getPlayer();
                 Entity vehicle = player.getVehicle();// 玩家乘坐的实体
+
                 PlaneLocation backPlane = BorderMath.getPointInsideBorder(border, location);
-                double distance = Math.sqrt(Math.pow(location.x() - backPlane.x(), 2) + Math.pow(location.z() - backPlane.z(), 2)) - 5;
-                Location back = new Location(location.getWorld(), backPlane.x(), location.y(), backPlane.z());
+                float targetY = player.getWorld().getHighestBlockYAt((int) Math.floor(backPlane.x()), (int) Math.floor(backPlane.z()));
+
+                double distance = Math.sqrt(Math.pow(location.x() - backPlane.x(), 2) + Math.pow(location.z() - backPlane.z(), 2));
+                Location back = new Location(location.getWorld(), backPlane.x(), targetY, backPlane.z());
+
                 if (distance >= 60) {
                     Objects.requireNonNullElse(vehicle, player).teleport(back);
                 } else {
                     // 移动 矢量计算
                     Vector vector = new Vector(backPlane.x() - location.x(), 0, backPlane.z() - location.z());
-                    // vector.normalize().multiply(speed);
+                    vector.normalize().multiply(1.2);
                     Objects.requireNonNullElse(vehicle, player).setVelocity(vector);
                 }
                 // 播放粒子效果
                 player.getWorld().spawnParticle(Particle.GLOW_SQUID_INK,
                         location.x(), location.y(), location.z(),
-                        200, 10, 10, 10);
+                        150, 10, 10, 10);
                 // 发送信息
                 player.sendTitlePart(TitlePart.TITLE, getMessage(Message.title));
                 player.sendTitlePart(TitlePart.SUBTITLE, getMessage(Message.subtitle));
